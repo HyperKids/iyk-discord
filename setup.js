@@ -13,11 +13,11 @@ const client = new Client({
 });
 
 const GUILD_ID = process.env.GUILD_ID;
-const WELCOME_CHAT = process.env.WELCOME_CHAT;
+const WELCOME_CHANNEL_ID = process.env.WELCOME_CHANNEL_ID;
 
 client.on(Events.ClientReady, async () => {
     const guild = client.guilds.cache.get(GUILD_ID);
-    const welcome = guild.channels.cache.get(WELCOME_CHAT);
+    const welcome = guild.channels.cache.get(WELCOME_CHANNEL_ID);
 
     const guest = new ButtonBuilder()
         .setCustomId(welcomeGuest)
@@ -41,4 +41,4 @@ client.on(Events.ClientReady, async () => {
     process.exit();
 })
 
-client.login(process.env.TOKEN);
+client.login(process.env.DISCORD_BOT_TOKEN);

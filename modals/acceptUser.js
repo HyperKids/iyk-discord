@@ -16,11 +16,11 @@ const {
     acceptModal
 } = require("../logic/helper");
 
-const PRIVATE_CHAT = process.env.PRIVATE_CHAT;
-const GUEST_ROLE = process.env.GUEST_ROLE;
+const PRIVATE_CHANNEL_ID = process.env.PRIVATE_CHANNEL_ID;
+const GUEST_ROLE_ID = process.env.GUEST_ROLE_ID;
 
-const HIGHEST_ROLE = process.env.HIGHEST_ROLE;
-const LOWEST_ROLE = process.env.LOWEST_ROLE;
+const HIGHEST_ROLE_ID = process.env.HIGHEST_ROLE_ID;
+const LOWEST_ROLE_ID = process.env.LOWEST_ROLE_ID;
 
 /**
  * @description Create a modal to decide what role to give the user
@@ -48,8 +48,8 @@ async function create(interaction) {
         return;
     }
 
-    const highestRolePosition = interaction.guild.roles.cache.get(HIGHEST_ROLE);
-    const lowestRolePosition = interaction.guild.roles.cache.get(LOWEST_ROLE);
+    const highestRolePosition = interaction.guild.roles.cache.get(HIGHEST_ROLE_ID);
+    const lowestRolePosition = interaction.guild.roles.cache.get(LOWEST_ROLE_ID);
 
     const roleChoice = new ActionRowBuilder()
         .setComponents(
@@ -79,7 +79,7 @@ async function create(interaction) {
 async function respond(interaction, userId, messageId) {
     const selectedRoleId = interaction.values[0];
 
-    const message = await interaction.guild.channels.cache.get(PRIVATE_CHAT).messages.fetch(messageId);
+    const message = await interaction.guild.channels.cache.get(PRIVATE_CHANNEL_ID).messages.fetch(messageId);
     const originalEmbed = EmbedBuilder.from(message.embeds[0]);
     const member = await interaction.guild.members.fetch(userId);
 
@@ -107,7 +107,7 @@ async function respond(interaction, userId, messageId) {
     });
 
     await member.roles.add(selectedRoleId);
-    await member.roles.remove(GUEST_ROLE);
+    await member.roles.remove(GUEST_ROLE_ID);
 
     try {
         await member.user.send({

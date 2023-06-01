@@ -19,8 +19,8 @@ const {
     isMemberAlready
 } = require("../logic/helper");
 
-const PRIVATE_CHAT = process.env.PRIVATE_CHAT;
-const GUEST_ROLE = process.env.GUEST_ROLE;
+const PRIVATE_CHANNEL_ID = process.env.PRIVATE_CHANNEL_ID;
+const GUEST_ROLE_ID = process.env.GUEST_ROLE_ID;
 
 /**
  * @description Create a modal to interview the user
@@ -109,13 +109,13 @@ async function respond(interaction) {
         ephemeral: true
     });
 
-    await interaction.guild.channels.cache.get(PRIVATE_CHAT).send({
+    await interaction.guild.channels.cache.get(PRIVATE_CHANNEL_ID).send({
         embeds: [embed],
         components: [row]
     });
 
     // assign the guest role
-    await interaction.member.roles.add(GUEST_ROLE);
+    await interaction.member.roles.add(GUEST_ROLE_ID);
 }
 
 module.exports = {

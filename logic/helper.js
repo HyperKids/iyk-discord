@@ -2,7 +2,7 @@ const {
     ChatInputCommandInteraction
 } = require("discord.js");
 
-const GUEST_ROLE = process.env.GUEST_ROLE;
+const GUEST_ROLE_ID = process.env.GUEST_ROLE_ID;
 
 /**
  * @description Check if the user already is a member (has a role higher than guest)
@@ -10,7 +10,7 @@ const GUEST_ROLE = process.env.GUEST_ROLE;
  * @param {Boolean} assign
  */
 async function isMemberAlready(interaction, assign) {
-    const guestRole = interaction.guild.roles.cache.get(GUEST_ROLE);
+    const guestRole = interaction.guild.roles.cache.get(GUEST_ROLE_ID);
 
     let highestRole = interaction.member.roles.highest;
 
@@ -26,7 +26,7 @@ async function isMemberAlready(interaction, assign) {
 
     if (assign) {
         // go ahead and give them guest
-        await interaction.member.roles.add(GUEST_ROLE);
+        await interaction.member.roles.add(GUEST_ROLE_ID);
     }
 
     return false;
