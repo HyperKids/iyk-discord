@@ -1,42 +1,48 @@
-const { 
-    ModalBuilder, 
-    ChatInputCommandInteraction, 
-    TextInputBuilder, 
-    TextInputStyle, 
+const {
+    ModalBuilder,
+    ChatInputCommandInteraction,
+    TextInputBuilder,
+    TextInputStyle,
     ActionRowBuilder,
     ModalSubmitInteraction,
-    EmbedBuilder
+    EmbedBuilder,
 } = require("discord.js");
 
-const {
-    denyModal,
-    denyModalReason
-} = require("../logic/helper");
+const { denyModal, denyModalReason } = require("../logic/helper");
+
+const { getLang } = require("../lang");
+const lang = process.env.LANG;
 
 const ACCESS_REQUEST_CHANNEL_ID = process.env.ACCESS_REQUEST_CHANNEL_ID;
 const GUEST_ROLE_ID = process.env.GUEST_ROLE_ID;
 
 /**
  * @description Create a modal to interview the user
- * @param {ChatInputCommandInteraction} interaction 
+ * @param {ChatInputCommandInteraction} interaction
  */
 async function create(interaction) {
     const originalEmbed = EmbedBuilder.from(interaction.message.embeds[0]);
 
-    const userId = originalEmbed.data.fields.filter(t => t.name === "User ID")[0].value;
+    const userId = originalEmbed.data.fields.filter(
+        (t) => t.name === "User ID"
+    )[0].value;
 
     const member = await interaction.guild.members.fetch(userId);
 
     if (!member) {
-        await interaction.reply({ content: "This user has left the server" });
+        await interaction.reply({
+            content: getLang(lang, "error_member_left_server"),
+        });
 
         // update the embed and mark it as done
-        originalEmbed.setFooter({ text: "User left the server" });
+        originalEmbed.setFooter({
+            text: getLang(lang, "footer_member_left_server"),
+        });
         originalEmbed.setColor(0x555555);
         originalEmbed.setTimestamp(new Date().valueOf());
 
         await interaction.message.edit({
-            embeds: [originalEmbed]
+            embeds: [originalEmbed],
         });
 
         return;
@@ -44,18 +50,17 @@ async function create(interaction) {
 
     const modal = new ModalBuilder()
         .setCustomId(`${denyModal}-${userId}-${interaction.message.id}`)
-        .setTitle("Send a custom deny reason?");
+        .setTitle("Deny Reason");
 
-    const denyReason = new ActionRowBuilder()
-        .setComponents(
-            new TextInputBuilder()
-                .setCustomId(denyModalReason)
-                .setLabel("Leave blank to send default")
-                .setStyle(TextInputStyle.Paragraph)
-                .setMaxLength(1024)
-                // comment the below line to make this required
-                .setRequired(false)
-                );
+    const denyReason = new ActionRowBuilder().setComponents(
+        new TextInputBuilder()
+            .setCustomId(denyModalReason)
+            .setLabel("Set deny reason here. Blank for default.")
+            .setStyle(TextInputStyle.Paragraph)
+            .setMaxLength(1024)
+            // comment the below line to make this required
+            .setRequired(false)
+    );
 
     modal.addComponents(denyReason);
 
@@ -64,58 +69,67 @@ async function create(interaction) {
 
 /**
  * @description Send the interview responses to a chat and give action buttons
- * @param {ModalSubmitInteraction} interaction 
+ * @param {ModalSubmitInteraction} interaction
  */
 async function respond(interaction, userId, messageId) {
-    const message = await interaction.guild.channels.cache.get(ACCESS_REQUEST_CHANNEL_ID).messages.fetch(messageId);
+    const message = await interaction.guild.channels.cache
+        .get(ACCESS_REQUEST_CHANNEL_ID)
+        .messages.fetch(messageId);
     const originalEmbed = EmbedBuilder.from(message.embeds[0]);
     const member = await interaction.guild.members.fetch(userId);
 
     if (!member) {
-        await interaction.reply({ content: "This user has left the server" });
+        await interaction.reply({
+            content: getLang(lang, "error_member_left_server"),
+            ephemeral: true,
+        });
 
         // update the embed and mark it as done
-        originalEmbed.setFooter({ text: "User left the server" });
+        originalEmbed.setFooter({
+            text: getLang(lang, "footer_member_left_server"),
+        });
         originalEmbed.setColor(0x555555);
         originalEmbed.setTimestamp(new Date().valueOf());
 
         await message.edit({
-            embeds: [originalEmbed]
+            embeds: [originalEmbed],
         });
 
         return;
     }
 
-    originalEmbed.setFooter({ text: "Denied" });
+    originalEmbed.setFooter({ text: getLang(lang, "footer_request_denied") });
     originalEmbed.setColor(0x000000);
     originalEmbed.setTimestamp(new Date().valueOf());
 
     await message.edit({
-        embeds: [originalEmbed]
+        embeds: [originalEmbed],
     });
 
     let denyReason = interaction.fields.getTextInputValue(denyModalReason);
 
-    if (!denyReason) denyReason = "You've been denied access.";
-    
+    if (!denyReason) denyReason = getLang(lang, "default_deny_reason");
+
     try {
         await member.user.send({
-            content: denyReason
+            content: getLang(lang, "dm_deny_message", denyReason),
         });
 
         await interaction.reply({
-            content: `Denied the user <@${userId}> and DM'd them successfully`
+            content: getLang(lang, "ephemeral_denied_dm", userId),
+            ephemeral: true,
         });
     } catch (err) {
         console.log(`Unable to DM ${userId}: ${err}`);
 
         await interaction.reply({
-            content: `Denied the user <@${userId}> but was unable to DM them`
+            content: getLang(lang, "ephemeral_denied_no_dm", userId),
+            ephemeral: true,
         });
     }
 }
 
 module.exports = {
     create,
-    respond
+    respond,
 };

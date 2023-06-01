@@ -37,22 +37,22 @@ async function create(interaction) {
         .setComponents(
             new TextInputBuilder()
                 .setCustomId(interviewIrlName)
-                .setLabel("What is my IRL name?")
+                .setLabel("What's the name I know you by?")
                 .setStyle(TextInputStyle.Short)
                 .setMaxLength(150)
                 // comment the below line to make this required
-                .setRequired(false)
+                //.setRequired(false)
                 );
 
     const howYouKnowMe = new ActionRowBuilder()
         .setComponents(
             new TextInputBuilder()
                 .setCustomId(interviewHowYouKnowMe)
-                .setLabel("How do you know me?")
+                .setLabel("Briefly remind me how I know you!")
                 .setStyle(TextInputStyle.Paragraph)
-                .setMaxLength(1024)
+                .setMaxLength(512)
                 // comment the below line to make this required
-                .setRequired(false)
+                //.setRequired(false)
                 );
 
     modal.addComponents(irlName, howYouKnowMe);
@@ -74,7 +74,7 @@ async function respond(interaction) {
     const howYouKnowMe = interaction.fields.getTextInputValue(interviewHowYouKnowMe) ?? "";
 
     const embed = {
-        color: 0xd22b2b,
+        color: 0xf2cd64,
         title: "Interview response",
         author: {
             name:  `${interaction.user.username}${interaction.user.discriminator === "0" ? "" : `#${interaction.user.discriminator}`}`,
@@ -87,7 +87,7 @@ async function respond(interaction) {
         ],
         timestamp: new Date().toISOString(),
         footer: {
-            text: 'Not yet responded'
+            text: 'Awaiting action'
         },
     };
 
@@ -105,7 +105,7 @@ async function respond(interaction) {
         .addComponents(approve, deny);
 
     await interaction.reply({ 
-        content: 'Your response has been recorded!',
+        content: 'Your response has been recorded - I\'ll get back to you shortly! In the meantime, I\'ve given you guest access so you can see the public channels.',
         ephemeral: true
     });
 

@@ -1,12 +1,10 @@
-const { 
-    ChatInputCommandInteraction
-} = require("discord.js");
+const { ChatInputCommandInteraction } = require("discord.js");
 
 const GUEST_ROLE_ID = process.env.GUEST_ROLE_ID;
 
 /**
  * @description Check if the user already is a member (has a role higher than guest)
- * @param {ChatInputCommandInteraction} interaction 
+ * @param {ChatInputCommandInteraction} interaction
  * @param {Boolean} assign
  */
 async function isMemberAlready(interaction, assign) {
@@ -17,8 +15,9 @@ async function isMemberAlready(interaction, assign) {
     if (highestRole && guestRole.position < highestRole.position) {
         // user cannot complete this, they already have a higher role
         interaction.reply({
-            content: "You already have a role higher than the guest role, you cannot complete this questionaire.",
-            ephemeral: true
+            content:
+                "You already have a non-guest role - to request a role / access change, send a DM to <@196685652249673728>.",
+            ephemeral: true,
         });
 
         return true;
@@ -49,5 +48,5 @@ module.exports = {
     denyModal: "deny",
     denyModalReason: "denyreason",
 
-    isMemberAlready
+    isMemberAlready,
 };

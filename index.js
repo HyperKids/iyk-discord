@@ -22,6 +22,9 @@ const interviewQuestions = require("./modals/interviewQuestions");
 const acceptUser = require("./modals/acceptUser");
 const denyUser = require("./modals/denyUser");
 
+const { getLang } = require("./lang");
+const lang = process.env.LANG;
+
 const client = new Client({ 
     intents: [
         GatewayIntentBits.Guilds
@@ -35,7 +38,7 @@ client.on(Events.InteractionCreate, async (interaction) => {
                 // give the user the guest role
                 if (!await isMemberAlready(interaction, true)) {
                     await interaction.reply({
-                        content: "Welcome! You've been given the `guest` role and can now access the server.",
+                        content: getLang(lang, "ephemeral_welcome_guest"),
                         ephemeral: true
                     });
                 }

@@ -25,6 +25,7 @@
   "homepage": "https://github.com/shatindle/do-you-know-me-discord-bot#readme",
   "dependencies": {
     "discord.js": "^14.11.0",
-    "dotenv": "^16.1.1"
+    "dotenv": "^16.1.1",
+    "sprintf-js": "^1.1.2"
   }
 }
