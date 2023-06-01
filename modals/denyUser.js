@@ -14,7 +14,6 @@ const { getLang } = require("../lang");
 const lang = process.env.LANG;
 
 const ACCESS_REQUEST_CHANNEL_ID = process.env.ACCESS_REQUEST_CHANNEL_ID;
-const GUEST_ROLE_ID = process.env.GUEST_ROLE_ID;
 
 /**
  * @description Create a modal to interview the user
