@@ -19,7 +19,7 @@ const {
     isMemberAlready
 } = require("../logic/helper");
 
-const PRIVATE_CHANNEL_ID = process.env.PRIVATE_CHANNEL_ID;
+const ACCESS_REQUEST_CHANNEL_ID = process.env.ACCESS_REQUEST_CHANNEL_ID;
 const GUEST_ROLE_ID = process.env.GUEST_ROLE_ID;
 
 /**
@@ -31,7 +31,7 @@ async function create(interaction) {
 
     const modal = new ModalBuilder()
         .setCustomId(interviewModal)
-        .setTitle("How well do you know me?");
+        .setTitle("Server Access Request");
 
     const irlName = new ActionRowBuilder()
         .setComponents(
@@ -109,7 +109,7 @@ async function respond(interaction) {
         ephemeral: true
     });
 
-    await interaction.guild.channels.cache.get(PRIVATE_CHANNEL_ID).send({
+    await interaction.guild.channels.cache.get(ACCESS_REQUEST_CHANNEL_ID).send({
         embeds: [embed],
         components: [row]
     });

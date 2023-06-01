@@ -35,7 +35,7 @@ client.on(Events.InteractionCreate, async (interaction) => {
                 // give the user the guest role
                 if (!await isMemberAlready(interaction, true)) {
                     await interaction.reply({
-                        content: "You have received the Guest role!",
+                        content: "Welcome! You've been given the `guest` role and can now access the server.",
                         ephemeral: true
                     });
                 }
