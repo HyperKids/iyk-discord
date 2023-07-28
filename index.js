@@ -46,10 +46,10 @@ client.on(Events.InteractionCreate, async (interaction) => {
                     await interviewQuestions.create(interaction);
                     return;
                 case interviewApprove:
-                    await acceptUser.create(interaction);
+                    await acceptUser.respond(interaction);
                     return;
                 case interviewDeny:
-                    await denyUser.create(interaction);
+                    await denyUser.respond(interaction);
                     return;
             }
         } catch (err) {
@@ -62,10 +62,6 @@ client.on(Events.InteractionCreate, async (interaction) => {
         try {
             if (interaction.customId === interviewModal)
                 return await interviewQuestions.respond(interaction);
-            if (interaction.customId.indexOf(denyModal + "-") === 0) {
-                const parts = interaction.customId.split("-");
-                return await denyUser.respond(interaction, parts[1], parts[2]);
-            }
         } catch (err) {
             console.error(
                 `Error on modal interaction: ${err}\n${err.stack || err}`
@@ -74,14 +70,7 @@ client.on(Events.InteractionCreate, async (interaction) => {
         }
     } else if (interaction.isStringSelectMenu()) {
         try {
-            if (interaction.customId.indexOf(acceptModal + "-") === 0) {
-                const parts = interaction.customId.split("-");
-                return await acceptUser.respond(
-                    interaction,
-                    parts[1],
-                    parts[2]
-                );
-            }
+
         } catch (err) {
             console.error(
                 `Error on select menu interaction: ${err}\n${err.stack || err}`

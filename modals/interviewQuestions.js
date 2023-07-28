@@ -31,13 +31,13 @@ async function create(interaction) {
 
     const modal = new ModalBuilder()
         .setCustomId(interviewModal)
-        .setTitle("Server Access Request");
+        .setTitle("Private Channel Access Form");
 
     const irlName = new ActionRowBuilder()
         .setComponents(
             new TextInputBuilder()
                 .setCustomId(interviewIrlName)
-                .setLabel("What's the name I know you by?")
+                .setLabel("What's your name?")
                 .setStyle(TextInputStyle.Short)
                 .setMaxLength(150)
                 // comment the below line to make this required
@@ -48,7 +48,7 @@ async function create(interaction) {
         .setComponents(
             new TextInputBuilder()
                 .setCustomId(interviewHowYouKnowMe)
-                .setLabel("Briefly remind me how I know you!")
+                .setLabel("How do you know Isaac?")
                 .setStyle(TextInputStyle.Paragraph)
                 .setMaxLength(512)
                 // comment the below line to make this required
@@ -75,19 +75,19 @@ async function respond(interaction) {
 
     const embed = {
         color: 0xf2cd64,
-        title: "Interview response",
+        title: "Access Request",
         author: {
             name:  `${interaction.user.username}${interaction.user.discriminator === "0" ? "" : `#${interaction.user.discriminator}`}`,
             icon_url: interaction.user.avatarURL()
         },
         fields: [
             { name: 'User ID', value: interaction.user.id },
-            { name: 'Your IRL name', value: irlName },
+            { name: 'Name', value: irlName + ` <@${interaction.user.id}>` },
             { name: 'How they know you', value: howYouKnowMe }
         ],
         timestamp: new Date().toISOString(),
         footer: {
-            text: 'Awaiting action'
+            text: 'Needs action'
         },
     };
 
@@ -105,7 +105,7 @@ async function respond(interaction) {
         .addComponents(approve, deny);
 
     await interaction.reply({ 
-        content: 'Your response has been recorded - I\'ll get back to you shortly! In the meantime, I\'ve given you guest access so you can see the public channels.',
+        content: 'Thanks for filling out the form - I\'ll get back to you shortly! In the meantime, I\'ve given you guest access so you can see the public channels.',
         ephemeral: true
     });
 

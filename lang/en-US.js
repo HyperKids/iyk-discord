@@ -13,25 +13,10 @@ const text = {
     error_member_left_server: "<:redtick:1113729536572534815> **Error:** This member left the server",
     footer_member_left_server: "Member left server",
     footer_request_denied: "❌ Denied",
-    default_deny_reason: "No reason provided",
 
     footer_request_approved: "✔️ Approved",
 
-    // DM messages
-    dm_deny_message:
-`Hey - your request for elevated access in Isaac's server was denied for the following reason:
-
-_%1$s_
-
-If you believe this is in error, please contact Isaac. You're welcome to stay in the server as a guest!`,
-    dm_approve_message: "Hey - just letting you know that your server access request on Isaac's server was approved! See you there :)",
-
-    // Ephemeral messages
-    ephemeral_approved_dm: "<:greentick:1113729496395292783> <@%1$s> was approved! They were sent a direct message.",
-    ephemeral_approved_no_dm: "<:greentick:1113729496395292783> <@%1$s> was approved! A direct message could not be sent.",
-    ephemeral_denied_dm: "<:greentick:1113729496395292783> <@%1$s> was denied! They were sent a direct message.",
-    ephemeral_denied_no_dm: "<:greentick:1113729496395292783> <@%1$s> was denied! A direct message could not be sent.",
-    ephemeral_welcome_guest: "Welcome to the server! You can now access the public channels. You can always come back and request access to private channels later."
+    ephemeral_welcome_guest: "Welcome to the server! You can now access the public channels. If you know me IRL, you should request access to the private channels with the button above. You can always come back and request access later!"
 };
 
 // WARNING: DO NOT EDIT ANYTHING BELOW THIS LINE
