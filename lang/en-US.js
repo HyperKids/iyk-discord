@@ -10,19 +10,21 @@ const strict = true;
  */
 const text = {
     // Access embeds
-    error_member_left_server: "<:redtick:1113729536572534815> **Error:** This member left the server",
+    error_member_left_server:
+        "<:redtick:1113729536572534815> **Error:** This member left the server",
     footer_member_left_server: "Member left server",
     footer_request_denied: "❌ Denied",
 
     footer_request_approved: "✔️ Approved",
 
-    ephemeral_welcome_guest: "Welcome to the server! You can now access the public channels. If you know me IRL, you should request access to the private channels with the button above. You can always come back and request access later!"
+    ephemeral_welcome_guest:
+        "Welcome to the server - excited to have you here! If you know me IRL, you can ask to access other channels with the button above.",
 };
 
 // WARNING: DO NOT EDIT ANYTHING BELOW THIS LINE
 
 /**
- * 
+ *
  * @param {string} key The key to use to find the appropriate text
  * @returns The correctly translated text for the key
  */
@@ -38,5 +40,5 @@ function language(key) {
 
 module.exports = {
     language,
-    text
+    text,
 };

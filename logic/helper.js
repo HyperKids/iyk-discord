@@ -16,7 +16,7 @@ async function isMemberAlready(interaction, assign) {
         // user cannot complete this, they already have a higher role
         interaction.reply({
             content:
-                "You already have a non-guest role - to request a role / access change, send a DM to <@196685652249673728>.",
+                "You already have a non-guest role - to request a role / access change, send a DM to <@196685652249673728>. You will need to temporarily remove your name color if you are receiving this message in error.",
             ephemeral: true,
         });
 
