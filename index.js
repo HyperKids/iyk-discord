@@ -80,4 +80,17 @@ client.on(Events.InteractionCreate, async (interaction) => {
     }
 });
 
+const http = require('http');
+const port = process.env.PORT || 3000;
+
+const server = http.createServer((req, res) => {
+    res.statusCode = 200;
+    res.setHeader('Content-Type', 'text/plain');
+    res.end('OK');
+});
+
+server.listen(port, () => {
+    console.log(`Health check server listening on port ${port}`);
+});
+
 client.login(process.env.DISCORD_BOT_TOKEN);
