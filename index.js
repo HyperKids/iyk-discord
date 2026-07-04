@@ -1,6 +1,6 @@
 require("dotenv").config();
 
-const { Client, Events, GatewayIntentBits } = require("discord.js");
+const { Client, Events, GatewayIntentBits, Partials } = require("discord.js");
 const {
     // buttons
     welcomeGuest,
@@ -25,9 +25,29 @@ const denyUser = require("./modals/denyUser");
 const { getLang } = require("./lang");
 const lang = process.env.LANG;
 
+const spamDetector = require("./moderation/spamDetector");
+const { warnOnMissingConfig } = require("./logic/spamConfig");
+
 const client = new Client({
-    intents: [GatewayIntentBits.Guilds],
+    intents: [
+        GatewayIntentBits.Guilds,
+        GatewayIntentBits.GuildMessages,
+        GatewayIntentBits.MessageContent,
+        GatewayIntentBits.GuildMembers,
+    ],
+    partials: [Partials.GuildMember],
 });
+
+// Spam-bot detection: log/ping (and, past the mute threshold, timeout + delete).
+// Handlers are internally guarded so a detector bug can't crash the bot.
+warnOnMissingConfig();
+spamDetector.startSweeper();
+client.on(Events.MessageCreate, (message) =>
+    spamDetector.onMessage(message).catch(console.error)
+);
+client.on(Events.GuildMemberUpdate, (oldMember, newMember) =>
+    spamDetector.onMemberUpdate(oldMember, newMember).catch(console.error)
+);
 
 client.on(Events.InteractionCreate, async (interaction) => {
     if (interaction.isButton()) {
