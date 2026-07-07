@@ -1,6 +1,12 @@
 require("dotenv").config();
 
-const { Client, Events, GatewayIntentBits } = require("discord.js");
+const {
+    Client,
+    Events,
+    GatewayIntentBits,
+    ContextMenuCommandBuilder,
+    ApplicationCommandType,
+} = require("discord.js");
 const {
     // buttons
     welcomeGuest,
@@ -14,6 +20,10 @@ const {
     acceptModal,
     denyModal,
 
+    // context menu commands
+    emergencyBanCommandName,
+    emergencyBanModal,
+
     // other functions
     isMemberAlready,
 } = require("./logic/helper");
@@ -21,12 +31,33 @@ const {
 const interviewQuestions = require("./modals/interviewQuestions");
 const acceptUser = require("./modals/acceptUser");
 const denyUser = require("./modals/denyUser");
+const emergencyBan = require("./modals/emergencyBan");
 
 const { getLang } = require("./lang");
 const lang = process.env.LANG;
 
 const client = new Client({
     intents: [GatewayIntentBits.Guilds],
+});
+
+client.once(Events.ClientReady, async (readyClient) => {
+    console.log(`Logged in as ${readyClient.user.tag}`);
+
+    try {
+        await readyClient.application.commands.set(
+            [
+                new ContextMenuCommandBuilder()
+                    .setName(emergencyBanCommandName)
+                    .setType(ApplicationCommandType.User),
+            ],
+            process.env.GUILD_ID
+        );
+        console.log("Guild commands registered");
+    } catch (err) {
+        console.error(
+            `Error registering guild commands: ${err}\n${err.stack || err}`
+        );
+    }
 });
 
 client.on(Events.InteractionCreate, async (interaction) => {
@@ -62,9 +93,21 @@ client.on(Events.InteractionCreate, async (interaction) => {
         try {
             if (interaction.customId === interviewModal)
                 return await interviewQuestions.respond(interaction);
+            if (interaction.customId.startsWith(`${emergencyBanModal}:`))
+                return await emergencyBan.respond(interaction);
         } catch (err) {
             console.error(
                 `Error on modal interaction: ${err}\n${err.stack || err}`
+            );
+            return;
+        }
+    } else if (interaction.isUserContextMenuCommand()) {
+        try {
+            if (interaction.commandName === emergencyBanCommandName)
+                return await emergencyBan.create(interaction);
+        } catch (err) {
+            console.error(
+                `Error on context menu interaction: ${err}\n${err.stack || err}`
             );
             return;
         }

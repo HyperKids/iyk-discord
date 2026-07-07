@@ -47,5 +47,13 @@ module.exports = {
     denyModal: "deny",
     denyModalReason: "denyreason",
 
+    // context menu commands
+    emergencyBanCommandName: "Emergency Ban",
+
+    // emergencyBanModal is a customId prefix - the full id is "emergencyban:<targetUserId>"
+    emergencyBanModal: "emergencyban",
+    emergencyBanPassword: "emergencybanpassword",
+    emergencyBanReason: "emergencybanreason",
+
     isMemberAlready,
 };
