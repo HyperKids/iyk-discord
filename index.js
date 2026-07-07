@@ -48,7 +48,10 @@ client.once(Events.ClientReady, async (readyClient) => {
             [
                 new ContextMenuCommandBuilder()
                     .setName(emergencyBanCommandName)
-                    .setType(ApplicationCommandType.User),
+                    .setType(ApplicationCommandType.User)
+                    // hidden from everyone by default - grant the mod role
+                    // access in Server Settings > Integrations > Emergency Ban
+                    .setDefaultMemberPermissions("0"),
             ],
             process.env.GUILD_ID
         );
